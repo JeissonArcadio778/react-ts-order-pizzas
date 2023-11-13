@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createOrder } from "../api/orderApi";
+import "./styles/OrderFormStyles.css";
 
 export const OrderForm = ({
   onOrderCreated,
@@ -32,30 +33,37 @@ export const OrderForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Nombre"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Dirección"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-      />
-      {pizzaOptions.map((pizza) => (
-        <label key={pizza}>
-          <input
-            type="checkbox"
-            checked={pizzas.includes(pizza)}
-            onChange={() => handlePizzaSelection(pizza)}
-          />
-          {pizza}
-        </label>
-      ))}
-      <button type="submit">Enviar Pedido</button>
-    </form>
+
+    <div className="form-container">
+      <h1>Bienvenido a Nuestra Pizzería</h1>
+      <h2>Crea tu Pedido</h2>
+    <div className="form-container">
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Nombre"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Dirección"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        {pizzaOptions.map((pizza) => (
+          <label key={pizza}>
+            <input
+              type="checkbox"
+              checked={pizzas.includes(pizza)}
+              onChange={() => handlePizzaSelection(pizza)}
+            />
+            {pizza}
+          </label>
+        ))}
+        <button type="submit">Enviar Pedido</button>
+      </form>
+    </div>
+    </div>
   );
 };
