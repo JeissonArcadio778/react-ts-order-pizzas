@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import { createOrder } from "../api/orderApi";
 import "./styles/OrderFormStyles.css";
 
+/**
+ * Componente de formulario de pedido.
+ * 
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {Function} props.onOrderCreated - Función que se llama cuando se crea un pedido.
+ * @returns {JSX.Element} Elemento JSX que representa el formulario de pedido.
+ */
 export const OrderForm = ({
   onOrderCreated,
 }: {

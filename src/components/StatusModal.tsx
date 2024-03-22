@@ -1,3 +1,10 @@
+/**
+ * Componente de modal para mostrar el estado de un pedido.
+ * 
+ * @param status - El estado del pedido.
+ * @param children - Los elementos hijos del componente.
+ * @returns El componente de modal.
+ */
 export const StatusModal = ({ status, children }: { status: string, children: React.ReactNode }) => {
     return (
       <div className="modal">
@@ -7,7 +14,7 @@ export const StatusModal = ({ status, children }: { status: string, children: Re
         </div>
       </div>
     );
-  };
+};
 
   
 

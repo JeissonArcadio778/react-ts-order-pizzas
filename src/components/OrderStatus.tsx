@@ -4,6 +4,12 @@ import { OrderModal } from "./OrderModal";
 
 import "./styles/OrderStatus.css";
 
+/**
+ * Componente que muestra el estado de un pedido.
+ * 
+ * @param orderId - El ID del pedido.
+ * @returns El componente de estado del pedido.
+ */
 export const OrderStatus = ({ orderId }: { orderId: string }) => {
   const [status, setStatus] = useState("CREATING_ORDER");
   const [orderInfo, setOrderInfo] = useState(null);
