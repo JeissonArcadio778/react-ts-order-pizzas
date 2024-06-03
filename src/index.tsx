@@ -16,6 +16,4 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-// Aquí puedes llamar a reportWebVitals si es necesario
-
 reportWebVitals();
