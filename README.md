@@ -1,4 +1,4 @@
-# ACTIVIDAD 6 - Desarrollo de Aplicaciones 
+# ACTIVIDAD 3 - Practica Profesional
 
 # Getting Started with Create React App
 
