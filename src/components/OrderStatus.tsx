@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { getOrderStatus } from "../api/orderApi";
-import { OrderModal } from "./OrderModal";
-
 import "./styles/OrderStatus.css";
+import papaTomandoOrden from './assets/images/papa-tomando-orden.png';
+import papaCocinera from './assets/images/papa-cocinera.png';
+import papaReady from './assets/images/papa-ready.png';
 
 /**
  * Componente que muestra el estado de un pedido.
@@ -10,14 +10,27 @@ import "./styles/OrderStatus.css";
  * @param orderId - El ID del pedido.
  * @returns El componente de estado del pedido.
  */
+interface OrderInfo {
+  name: string;
+  address: string;
+  order_id: string;
+  delivery_status: string;
+}
+
 export const OrderStatus = ({ orderId }: { orderId: string }) => {
   const [status, setStatus] = useState("CREATING_ORDER");
-  const [orderInfo, setOrderInfo] = useState(null);
+  const [orderInfo, setOrderInfo] = useState<OrderInfo | null>(null);
 
   useEffect(() => {
     const fetchOrderStatus = async () => {
       try {
-        const response = await getOrderStatus(orderId);
+        // Mocked response
+        const response = {
+          name: "Juan Pérez",
+          address: "Calle Falsa 123",
+          order_id: orderId,
+          delivery_status: "READY_FOR_DELIVERY",
+        };
         setStatus(response.delivery_status);
         setOrderInfo(response);
       } catch (error) {
@@ -25,7 +38,7 @@ export const OrderStatus = ({ orderId }: { orderId: string }) => {
       }
     };
 
-    // Realizar la primera llamada inmediatamente y luego establecer un intervalo
+    // Initial call and interval for polling status updates
     fetchOrderStatus();
     const intervalId = setInterval(fetchOrderStatus, 10000);
 
@@ -36,62 +49,60 @@ export const OrderStatus = ({ orderId }: { orderId: string }) => {
     switch (status) {
       case "CREATING_ORDER":
         return (
-          <>
-            <p>Creando tu pedido...</p>
-            <p>Espera un momento mientras procesamos tu orden.</p>
+          <StatusModal 
+            status="Estado: Creando Pedido" 
+            message="Por favor espera..." 
+            imageSrc={papaTomandoOrden}
+          >
             <div className="loader"></div>
-          </>
+          </StatusModal>
         );
       case "PREPARING":
         return (
-          <>
-            <p>Preparando tu pedido...</p>
+          <StatusModal 
+            status="Estado: Preparando tu Pedido" 
+            message="Por favor espera..." 
+            imageSrc={papaCocinera}
+          >
             <div className="loader"></div>
-          </>
+          </StatusModal>
         );
       case "READY_FOR_DELIVERY":
-        return <OrderModal orderInfo={orderInfo} />;
+        return (
+          <StatusModal 
+            status="Estado: Pedido listo para entrega" 
+            imageSrc={papaReady}
+          >
+            <div className="order-summary">
+              <p>Información del pedido:</p>
+              <p>Nombre: {orderInfo?.name || 'xxxxxxxx'}</p>
+              <p>Dirección: {orderInfo?.address || 'xxxxxxxx'}</p>
+              <p>Orden del pedido: {orderInfo?.order_id || 'xxxxxxxx'}</p>
+              <p>¡Gracias por tu compra!</p>
+            </div>
+          </StatusModal>
+        );
       default:
-        return <p>Creando Pedido... Espera unos segundos</p>;
+        return <p>Estado desconocido</p>;
     }
   };
 
   return (
-    <StatusModal status={status}>
+    <div className="order-status-container">
       {renderOrderStatusContent()}
-    </StatusModal>
-  );
-};
-
-export const PreparingOrder = () => {
-  return (
-    <div className="order-status">
-      <p>Preparando tu pedido...</p>
-      <div className="loader"></div>
     </div>
   );
 };
 
-export const StatusModal = ({ status, children }: { status: string, children: React.ReactNode }) => {
+const StatusModal = ({ status, message, imageSrc, children }: { status: string; message?: string; imageSrc: string; children: React.ReactNode }) => {
   return (
     <div className="modal">
-      <div className={`modal-content ${status !== 'CREATING_ORDER' ? 'show' : ''}`}>
-        <h2>Estado del Pedido: {traducirEstado(status)}</h2>
+      <div className="modal-content show">
+        <h2>{status}</h2>
+        {imageSrc && <img src={imageSrc} alt="Order Status" className="status-image" />}
+        {message && <p>{message}</p>}
         {children}
       </div>
     </div>
   );
-};
-
-const traducirEstado = (estado: string) => {
-  switch (estado) {
-    case 'CREATING_ORDER':
-      return 'Creando Pedido';
-    case 'PREPARING':
-      return 'Preparando';
-    case 'READY_FOR_DELIVERY':
-      return 'Listo para Entrega';
-    default:
-      return 'Creando Pedido';
-  }
 };

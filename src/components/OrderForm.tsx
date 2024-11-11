@@ -1,77 +1,50 @@
-import React, { useState } from "react";
-import { createOrder } from "../api/orderApi";
-import "./styles/OrderFormStyles.css";
+import React from 'react';
+import './styles/OrderFormStyles.css';
 
-/**
- * Componente de formulario de pedido.
- * 
- * @component
- * @param {Object} props - Propiedades del componente.
- * @param {Function} props.onOrderCreated - Función que se llama cuando se crea un pedido.
- * @returns {JSX.Element} Elemento JSX que representa el formulario de pedido.
- */
-export const OrderForm = ({
-  onOrderCreated,
-}: {
-  onOrderCreated: (orderId: string) => void;
-}) => {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [pizzas, setPizzas] = useState<string[]>([]);
-  const pizzaOptions = ["Hawillana", "Champiñones", "Pepperoni", "Vegetariana"];
+import salchipapaClasica from './assets/images/Salchipapa_clasica_o_sencilla.png';
+import salchipapaPerro from './assets/images/salchipapa_perro_o_hamburguesa.png';
+import salchipapaQueso from './assets/images/salchipapa_mas_queso.png';
+import dosSalchipapas from './assets/images/dos_salchipapas.png';
 
-  const handlePizzaSelection = (selectedPizza: string) => {
-    if (pizzas.includes(selectedPizza)) {
-      setPizzas(pizzas.filter((pizza) => pizza !== selectedPizza));
-    } else {
-      setPizzas([...pizzas, selectedPizza]);
-    }
-  };
+interface OrderItem {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  imageUrl: string;
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
+const orderItems: OrderItem[] = [
+  { id: 1, name: 'Salchipapa clásica o sencilla', description: 'Salchipapa clásica o sencilla', price: '$5,000', imageUrl: salchipapaClasica },
+  { id: 2, name: 'Salchipapa + Gaseosa + Hamburguesa/Perro', description: 'Salchipapa + Gaseosa + Hamburguesa o Perro', price: '$10,000', imageUrl: salchipapaPerro },
+  { id: 3, name: 'Salchipapa + Gaseosa + Deditos de queso/Nuggets', description: 'Salchipapa + Gaseosa + Deditos de queso o Nuggets', price: '$12,000', imageUrl: salchipapaQueso },
+  { id: 4, name: 'Salchipapa especial (2x1) + Gaseosa + Cebollas caramelizadas', description: 'Salchipapa especial (2x1) + Gaseosa + Cebollas caramelizadas', price: '$15,000', imageUrl: dosSalchipapas },
+];
+
+export const Order: React.FC = () => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await createOrder({ name, address, pizzas });
-
-      const orderId = response.data.message.split(" ")[8];
-      onOrderCreated(orderId);
-    } catch (error) {
-      console.error(error);
-    }
+    console.log('Order submitted');
   };
 
   return (
-
     <div className="form-container">
-      <h1>Bienvenido a Nuestra Pizzería</h1>
-      <h2>Crea tu Pedido</h2>
-    <div className="form-container">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Dirección"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        {pizzaOptions.map((pizza) => (
-          <label key={pizza}>
-            <input
-              type="checkbox"
-              checked={pizzas.includes(pizza)}
-              onChange={() => handlePizzaSelection(pizza)}
-            />
-            {pizza}
-          </label>
+      <h2>Crea tu pedido</h2>
+      <div className="order-items">
+        {orderItems.map((item) => (
+          <div key={item.id} className="order-item">
+            <div className="item-description">
+              <h3>{item.name}</h3>
+              <p>{item.description}</p>
+            </div>
+            <div className="item-details">
+              <img src={item.imageUrl} alt={item.name} />
+              <span className="price">{item.price}</span>
+            </div>
+          </div>
         ))}
-        <button type="submit">Enviar Pedido</button>
-      </form>
-    </div>
+      </div>
+      <button className="submit-button" onClick={handleSubmit}>Enviar</button>
     </div>
   );
 };

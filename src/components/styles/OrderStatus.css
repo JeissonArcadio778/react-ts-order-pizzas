@@ -1,57 +1,113 @@
-.order-status {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
+/* General Container Styling */
+.order-status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #FFF8DC; /* Pastel yellow background */
+  font-family: 'Poppins', sans-serif; /* Modern font */
+}
 
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
-    width: 100%;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-  }
-    
+/* Modal Styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .modal h2 {
-    font-family: 'Arial', sans-serif;
-    color: #2c3e50;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-  }
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  transition: opacity 0.3s ease-in-out;
+  color: #333; /* Dark text color */
+}
 
-  .modal-content.show {
-    opacity: 1;
-  }
-  
-  .loader {
-    border: 4px solid #ecf0f1;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
-  }
-  
+.modal-content.show {
+  opacity: 1;
+}
+
+/* Header Text Styling */
+.modal-content h2 {
+  font-size: 24px;
+  color: #333; /* Dark text color */
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* Image Styling */
+.status-image {
+  width: 80px;
+  height: 80px;
+  margin: 20px auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Paragraph Text Styling */
+.modal-content p {
+  font-size: 16px;
+  color: #555; /* Slightly soft gray for descriptions */
+  margin: 10px 0;
+}
+
+/* Loader Styling */
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #e74c3c; /* Red accent for loader */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1.5s linear infinite;
+  margin: 20px auto;
+}
+
+/* Button Styling */
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #e74c3c; /* Red button color */
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button:hover {
+  background-color: #c0392b; /* Darker red for hover effect */
+}
+
+/* Order Summary Styling */
+.order-summary {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #333; /* Dark text color */
+}
+
+.order-summary p {
+  margin: 5px 0;
+  font-weight: 400;
+}
+
+/* Keyframes for Loader */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
