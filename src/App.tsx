@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { LandingPage } from './components/LandingPage';
 import { CreateAccount } from './components/CreateAccount';
 import { Login } from './components/Login';
+import { ConfirmAccount } from './components/ConfirmationAccount';
+
 // FOR TEST:
 import { Order } from './components/OrderForm';
 import { PaymentMethod } from './components/PaymentMethod';
@@ -14,6 +16,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/confirm-account" element={<ConfirmAccount />} />
         <Route path="/login" element={<Login />} />
         {/* FOR TEST: */}
         <Route path="/order" element={<Order />} />
