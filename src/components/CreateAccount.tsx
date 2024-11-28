@@ -13,6 +13,7 @@ export const CreateAccount: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      console.log('Register user:', email + ' ' + password + ' ' + role);
       await registerUser({ email, password, role });
       setMessage('Registro exitoso. Por favor, verifica tu correo electrónico para confirmar tu cuenta.');
       navigate('/confirm-account');

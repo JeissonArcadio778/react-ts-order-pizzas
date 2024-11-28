@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createOrder } from '../api/orderApi';
 import './styles/OrderFormStyles.css';
 
 import salchipapaClasica from './assets/images/Salchipapa_clasica_o_sencilla.png';
@@ -22,9 +24,55 @@ const orderItems: OrderItem[] = [
 ];
 
 export const Order: React.FC = () => {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [showModal, setShowModal] = useState(false);
+  const [address, setAddress] = useState('');
+  const [clientName, setClientName] = useState('');
+  const [selectedItems, setSelectedItems] = useState<OrderItem[]>([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const navigate = useNavigate();
+
+  const handleItemSelect = (item: OrderItem) => {
+    if (selectedItems.includes(item)) {
+      setSelectedItems(selectedItems.filter(i => i.id !== item.id));
+      setTotalPrice(totalPrice - parseInt(item.price.replace('$', '').replace(',', '')));
+    } else {
+      setSelectedItems([...selectedItems, item]);
+      setTotalPrice(totalPrice + parseInt(item.price.replace('$', '').replace(',', '')));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Order submitted');
+    const clientEmail = localStorage.getItem('client_email');
+    const accessToken = localStorage.getItem('access_token');
+    if (!clientEmail || !accessToken) {
+      console.error('Client email or access token not found in local storage');
+      return;
+    }
+
+    const orderData = {
+      address,
+      client_name: clientName,
+      client_email: clientEmail,
+      salchipapas: selectedItems.map(item => ({
+        type: item.name,
+        potatoes: 'Criollas', // Example value, you can customize this
+        sausages: 'Pollo', // Example value, you can customize this
+        sauces: ['Mayonesa', 'Ketchup'], // Example value, you can customize this
+        drink: 'Coca Cola', // Example value, you can customize this
+        extras: ['Queso', 'Huevo de codorniz'], // Example value, you can customize this
+        quantity: 1 // Example value, you can customize this
+      })),
+      totalPrice
+    };
+
+    try {
+      const response = await createOrder(orderData, accessToken);
+      console.log('Order submitted:', response);
+      navigate('/status', { state: { orderId: response.order.orderId } });
+    } catch (error) {
+      console.error('Error submitting order:', error);
+    }
   };
 
   return (
@@ -32,7 +80,7 @@ export const Order: React.FC = () => {
       <h2>Crea tu pedido</h2>
       <div className="order-items">
         {orderItems.map((item) => (
-          <div key={item.id} className="order-item">
+          <div key={item.id} className={`order-item ${selectedItems.includes(item) ? 'selected' : ''}`} onClick={() => handleItemSelect(item)}>
             <div className="item-description">
               <h3>{item.name}</h3>
               <p>{item.description}</p>
@@ -44,7 +92,45 @@ export const Order: React.FC = () => {
           </div>
         ))}
       </div>
-      <button className="submit-button" onClick={handleSubmit}>Enviar</button>
+      <button className="submit-button" onClick={() => setShowModal(true)}>Continuar</button>
+      <button className="history-button" onClick={() => navigate('/purchase-history')}>Historial de Pedidos</button>
+
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Confirmar Pedido</h2>
+            <form onSubmit={handleSubmit}>
+              <label>Nombre del Cliente:</label>
+              <input
+                type="text"
+                placeholder="Nombre del Cliente"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+              />
+              <label>Dirección:</label>
+              <input
+                type="text"
+                placeholder="Dirección"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+              <div className="selected-items">
+                <h3>Productos Seleccionados:</h3>
+                {selectedItems.map(item => (
+                  <div key={item.id} className="selected-item">
+                    <span>{item.name}</span>
+                    <span>{item.price}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="modal-buttons">
+                <button type="button" onClick={() => setShowModal(false)}>Cancelar</button>
+                <button type="submit">Confirmar Pedido</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

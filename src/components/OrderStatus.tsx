@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
+import { getOrderStatus } from '../api/orderApi';
 import "./styles/OrderStatus.css";
 import papaTomandoOrden from './assets/images/papa-tomando-orden.png';
 import papaCocinera from './assets/images/papa-cocinera.png';
@@ -17,24 +19,33 @@ interface OrderInfo {
   delivery_status: string;
 }
 
-export const OrderStatus = ({ orderId }: { orderId: string }) => {
+export const OrderStatus = () => {
+  const location = useLocation();
+  const { orderId } = location.state;
   const [status, setStatus] = useState("CREATING_ORDER");
   const [orderInfo, setOrderInfo] = useState<OrderInfo | null>(null);
 
   useEffect(() => {
     const fetchOrderStatus = async () => {
+      const accessToken = localStorage.getItem('access_token');
+      console.log('Access token:', accessToken);
+      if (!accessToken) {
+        console.error('Access token not found in local storage');
+        return;
+      }
+
       try {
-        // Mocked response
-        const response = {
-          name: "Juan Pérez",
-          address: "Calle Falsa 123",
-          order_id: orderId,
-          delivery_status: "READY_FOR_DELIVERY",
-        };
-        setStatus(response.delivery_status);
-        setOrderInfo(response);
+        const response = await getOrderStatus(orderId, accessToken);
+        const orderData = response.order;
+        setStatus(orderData.delivery_status);
+        setOrderInfo({
+          name: orderData.clientName,
+          address: orderData.address,
+          order_id: orderData.orderId,
+          delivery_status: orderData.delivery_status,
+        });
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching order status:', error);
       }
     };
 

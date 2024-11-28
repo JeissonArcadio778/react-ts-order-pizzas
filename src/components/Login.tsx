@@ -13,7 +13,9 @@ export const Login: React.FC = () => {
     e.preventDefault();
     try {
       const response = await loginUser({ email, password });
-      localStorage.setItem('authToken', response.token);
+      console.log('Login successful:', response.token.AccessToken);
+      localStorage.setItem('access_token', response.token.AccessToken);
+      localStorage.setItem('client_email', email);
       navigate('/order');
     } catch (error) {
       setMessage('Error al iniciar sesión. Por favor, verifica tus credenciales.');
