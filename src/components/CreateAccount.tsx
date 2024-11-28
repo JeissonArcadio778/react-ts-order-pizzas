@@ -1,45 +1,47 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../api/userApi';
 import './styles/CreateAccountStyles.css';
 
 export const CreateAccount: React.FC = () => {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('Clients');
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mocked submission action
-    console.log('Account created:', { name, email, address });
-    // Redirect or clear form as needed
+    try {
+      await registerUser({ email, password, role });
+      setMessage('Registro exitoso. Por favor, verifica tu correo electrónico para confirmar tu cuenta.');
+      navigate('/confirm-account');
+    } catch (error) {
+      setMessage('Hubo un error en el registro. Intenta nuevamente.');
+    }
   };
 
   return (
     <div className="form-container">
-      <h2>Bienvenido a Mandiricas</h2>
+      <h2>Crear Cuenta</h2>
       <form onSubmit={handleSubmit}>
-        <label>Nombre:</label>
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <label>Correo electrónico:</label>
+        <label>Correo Electrónico:</label>
         <input
           type="email"
           placeholder="Correo electrónico"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <label>Dirección:</label>
+        <label>Contraseña:</label>
         <input
-          type="text"
-          placeholder="Dirección"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Enviar</button>
+        <button type="submit">Registrar</button>
       </form>
+      {message && <p>{message}</p>}
     </div>
   );
 };
