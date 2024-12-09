@@ -36,7 +36,8 @@ export const OrderStatus = () => {
 
       try {
         const response = await getOrderStatus(orderId, accessToken);
-        const orderData = response.order;
+        console.log('Order status response:', response);
+        const orderData = response;
         setStatus(orderData.delivery_status);
         setOrderInfo({
           name: orderData.clientName,
@@ -94,7 +95,15 @@ export const OrderStatus = () => {
           </StatusModal>
         );
       default:
-        return <p>Estado desconocido</p>;
+        return (
+          <StatusModal 
+            status="Estado: Creando Pedido" 
+            message="Por favor espera..." 
+            imageSrc={papaTomandoOrden}
+          >
+            <div className="loader"></div>
+          </StatusModal>
+        );
     }
   };
 
