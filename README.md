@@ -1,4 +1,4 @@
-# Backend AWS Order Salchipapas
+# Frontend AWS Order Salchipapas
 
 # Getting Started with Create React App
 
