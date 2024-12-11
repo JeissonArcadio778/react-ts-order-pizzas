@@ -16,7 +16,13 @@ export const Login: React.FC = () => {
       console.log('Login successful:', response.token.AccessToken);
       localStorage.setItem('access_token', response.token.AccessToken);
       localStorage.setItem('client_email', email);
-      navigate('/order');
+      localStorage.setItem('client_role', response.role);
+      if (response.role === 'Client') {
+        navigate('/order');
+      }
+      if (response.role === 'Administrators' || response.role === 'Cooks') {
+        navigate('/admin');
+      }
     } catch (error) {
       setMessage('Error al iniciar sesión. Por favor, verifica tus credenciales.');
     }

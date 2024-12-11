@@ -45,3 +45,19 @@ export const getPurchaseHistory = async (email: string, accessToken: string) => 
     throw error;
   }
 };
+
+
+export const getAllOrders = async (filters: any) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/orders`, {
+      headers: {
+        'Authorization': `Bearer ${filters.accessToken}`
+      },
+      params: filters
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw error;
+  }
+}
