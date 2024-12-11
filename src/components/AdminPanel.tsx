@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getAllOrders } from "../api/orderApi"; // Asegúrate de que exista esta función
+import { getAllOrders, updateOrderStatus } from "../api/orderApi";
 import "./styles/AdminPanelStyles.css";
 
 export const AdminPanel: React.FC = () => {
@@ -27,15 +27,33 @@ export const AdminPanel: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    fetchOrders();
-  }, [filters]);
-
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
+
+  const handleSendOrder = async (orderId: string) => {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      if (!accessToken) {
+        console.error('Access token not found in local storage');
+        return;
+      }
+      await updateOrderStatus(orderId, accessToken);
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.orderId === orderId ? { ...order, status: "ENVIADO" } : order
+        )
+      );
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [filters]);
 
   return (
     <div className="admin-panel">
@@ -62,7 +80,6 @@ export const AdminPanel: React.FC = () => {
         >
           <option value="">Todos</option>
           <option value="PENDING">Pendiente</option>
-          <option value="READY_FOR_DELIVERY">Listo</option>
           <option value="DELIVERED">Entregado</option>
         </select>
         <input
@@ -76,12 +93,17 @@ export const AdminPanel: React.FC = () => {
       </div>
       <div className="orders-list">
         {orders.length > 0 ? (
-          orders.map((order, index) => (
-            <div key={index} className="order-item">
+          orders.map((order) => (
+            <div key={order.orderId} className="order-item">
               <h3>Pedido: {order.orderId}</h3>
               <p>Cliente: {order.clientEmail}</p>
               <p>Estado: {order.status}</p>
               <p>Fecha: {order.createdAt}</p>
+              {order.status === "PENDING" && (
+                <button onClick={() => handleSendOrder(order.orderId)}>
+                  Enviar Pedido
+                </button>
+              )}
             </div>
           ))
         ) : (
