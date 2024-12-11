@@ -43,6 +43,11 @@ export const Order: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (selectedItems.length === 0) {
+      alert('Debes seleccionar al menos un producto para continuar con el pedido.');
+      return;
+    }
+
     const clientEmail = localStorage.getItem('client_email');
     const accessToken = localStorage.getItem('access_token');
     if (!clientEmail || !accessToken) {
@@ -56,12 +61,12 @@ export const Order: React.FC = () => {
       client_email: clientEmail,
       salchipapas: selectedItems.map(item => ({
         type: item.name,
-        potatoes: 'Criollas', // Example value, you can customize this
-        sausages: 'Pollo', // Example value, you can customize this
-        sauces: ['Mayonesa', 'Ketchup'], // Example value, you can customize this
-        drink: 'Coca Cola', // Example value, you can customize this
-        extras: ['Queso', 'Huevo de codorniz'], // Example value, you can customize this
-        quantity: 1 // Example value, you can customize this
+        potatoes: 'Criollas',
+        sausages: 'Pollo', 
+        sauces: ['Mayonesa', 'Ketchup'],
+        drink: 'Coca Cola',
+        extras: ['Queso', 'Huevo de codorniz'],
+        quantity: 1
       })),
       totalPrice
     };
@@ -122,6 +127,9 @@ export const Order: React.FC = () => {
                     <span>{item.price}</span>
                   </div>
                 ))}
+              </div>
+              <div className="total-price">
+                <h3>Total: ${totalPrice.toLocaleString()}</h3>
               </div>
               <div className="modal-buttons">
                 <button type="button" onClick={() => setShowModal(false)}>Cancelar</button>

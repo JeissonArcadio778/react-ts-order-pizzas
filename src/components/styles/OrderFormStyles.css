@@ -139,6 +139,11 @@
   border-bottom: 1px solid #ccc;
 }
 
+.total-price {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
 .modal-buttons {
   display: flex;
   justify-content: space-between;
