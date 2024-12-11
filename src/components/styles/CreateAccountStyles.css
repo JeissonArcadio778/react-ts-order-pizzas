@@ -33,12 +33,12 @@ body {
 .form-container input[type="password"],
 .form-container input[type="text"] {
     display: block;
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-right: 10px;
+    box-sizing: border-box;
 }
 
 .form-container button {
