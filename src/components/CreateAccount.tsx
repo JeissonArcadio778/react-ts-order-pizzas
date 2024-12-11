@@ -6,17 +6,30 @@ import './styles/CreateAccountStyles.css';
 export const CreateAccount: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('Clients');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateEmail(email)) {
+      setMessage('Correo electrónico no válido.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setMessage('Las contraseñas no coinciden.');
+      return;
+    }
     try {
-      console.log('Register user:', email + ' ' + password + ' ' + role);
       await registerUser({ email, password, role });
       setMessage('Registro exitoso. Por favor, verifica tu correo electrónico para confirmar tu cuenta.');
-      navigate('/confirm-account');
+      navigate('/confirm-account', { state: { email } });
     } catch (error) {
       setMessage('Hubo un error en el registro. Intenta nuevamente.');
     }
@@ -39,6 +52,13 @@ export const CreateAccount: React.FC = () => {
           placeholder="Contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+        />
+        <label>Confirmar Contraseña:</label>
+        <input
+          type="password"
+          placeholder="Confirmar Contraseña"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <button type="submit">Registrar</button>
       </form>

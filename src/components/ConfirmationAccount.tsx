@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { confirmUser } from '../api/userApi';
 import './styles/CreateAccountStyles.css';
 
 export const ConfirmAccount: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const location = useLocation();
+  const [email, setEmail] = useState(location.state?.email || '');
   const [confirmationCode, setConfirmationCode] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -24,13 +25,17 @@ export const ConfirmAccount: React.FC = () => {
     <div className="form-container">
       <h2>Confirmar Cuenta</h2>
       <form onSubmit={handleConfirm}>
-        <label>Correo Electrónico:</label>
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        {!email && (
+          <>
+            <label>Correo Electrónico:</label>
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </>
+        )}
         <label>Código de Confirmación:</label>
         <input
           type="text"
