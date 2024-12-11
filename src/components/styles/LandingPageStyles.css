@@ -4,27 +4,26 @@
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: white;
     text-align: center;
 }
 
 .form-container h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 25px;
+    font-size: 32px;
     color: #333;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 .image-placeholder {
-    width: 100px; /* Adjusted to fit better as a logo placeholder */
-    height: 100px;
+    width: 120px;
+    height: 120px; 
     background-color: #e0e0e0;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px auto; /* Centered the logo */
-    border-radius: 50%; /* Added rounded corners to match the prototype style */
+    margin: 0 auto 50px auto;
+    border-radius: 50%;
 }
 
 .image-placeholder img {
@@ -41,7 +40,7 @@
 }
 
 .btn {
-    width: 48%; /* Adjusted width to fit both buttons in a row */
+    width: 48%;
     padding: 10px;
     border: none;
     border-radius: 4px;
@@ -50,6 +49,8 @@
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-shadow: none;
+    text-decoration-line: none;
 }
 
 .btn:hover {
