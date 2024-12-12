@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createOrder } from '../api/orderApi';
+import { getUserProfile } from '../api/userApi';
 import './styles/OrderFormStyles.css';
 
 import salchipapaClasica from './assets/images/Salchipapa_clasica_o_sencilla.png';
@@ -30,6 +31,18 @@ export const Order: React.FC = () => {
   const [selectedItems, setSelectedItems] = useState<OrderItem[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const clientEmail = localStorage.getItem('client_email');
+      if (clientEmail) {
+        const profileData = await getUserProfile(clientEmail);
+        setClientName(profileData.userAttributes.name);
+        setAddress(profileData.userAttributes.address);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   const handleItemSelect = (item: OrderItem) => {
     if (selectedItems.includes(item)) {
