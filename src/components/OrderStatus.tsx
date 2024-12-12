@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getOrderStatus } from '../api/orderApi';
 import "./styles/OrderStatus.css";
 import papaTomandoOrden from './assets/images/papa-tomando-orden.png';
@@ -21,6 +21,7 @@ interface OrderInfo {
 
 export const OrderStatus = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { orderId } = location.state;
   const [status, setStatus] = useState("CREATING_ORDER");
   const [orderInfo, setOrderInfo] = useState<OrderInfo | null>(null);
@@ -50,7 +51,6 @@ export const OrderStatus = () => {
       }
     };
 
-    // Initial call and interval for polling status updates
     fetchOrderStatus();
     const intervalId = setInterval(fetchOrderStatus, 10000);
 
@@ -91,6 +91,10 @@ export const OrderStatus = () => {
               <p>Dirección: {orderInfo?.address || 'xxxxxxxx'}</p>
               <p>Orden del pedido: {orderInfo?.order_id || 'xxxxxxxx'}</p>
               <p>¡Gracias por tu compra!</p>
+              <div className="modal-buttons">
+                <button onClick={() => navigate('/')}>Ir al Inicio</button>
+                <button onClick={() => navigate('/order')}>Hacer Otro Pedido</button>
+              </div>
             </div>
           </StatusModal>
         );
