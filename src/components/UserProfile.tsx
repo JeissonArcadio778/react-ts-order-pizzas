@@ -2,20 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { getUserProfile, updateUserProfile } from '../api/userApi';
 import './styles/UserProfileStyles.css';
 
+interface UserProfileData {
+  email: string;
+  email_verified: string;
+  phone_number: string;
+  phone_number_verified: string;
+  name: string;
+  address: string;
+  sub: string;
+}
+
 export const UserProfile: React.FC = () => {
-  const [profile, setProfile] = useState({
-    name: '',
+  const [profile, setProfile] = useState<UserProfileData>({
     email: '',
+    email_verified: '',
+    phone_number: '',
+    phone_number_verified: '',
+    name: '',
     address: '',
-    phone: ''
+    sub: ''
   });
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
       const clientEmail = localStorage.getItem('client_email');
       if (clientEmail) {
         const profileData = await getUserProfile(clientEmail);
-        setProfile(profileData);
+        setProfile(profileData.userAttributes);
       }
     };
     fetchProfile();
@@ -30,8 +44,13 @@ export const UserProfile: React.FC = () => {
     e.preventDefault();
     const clientEmail = localStorage.getItem('client_email');
     if (clientEmail) {
-      await updateUserProfile(clientEmail, profile);
-      alert('Perfil actualizado con éxito');
+      await updateUserProfile(clientEmail, {
+        name: profile.name,
+        email: profile.email,
+        address: profile.address,
+        phoneNumber: profile.phone_number
+      });
+      setShowModal(true);
     }
   };
 
@@ -46,9 +65,18 @@ export const UserProfile: React.FC = () => {
         <label>Dirección:</label>
         <input type="text" name="address" value={profile.address} onChange={handleChange} required />
         <label>Teléfono:</label>
-        <input type="text" name="phone" value={profile.phone} onChange={handleChange} required />
+        <input type="text" name="phone_number" value={profile.phone_number} onChange={handleChange} required />
         <button type="submit">Actualizar Perfil</button>
       </form>
+
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Perfil actualizado con éxito</h3>
+            <button onClick={() => setShowModal(false)}>Cerrar</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
