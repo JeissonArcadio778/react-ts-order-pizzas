@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/userApi';
+import { useAuth } from '../context/AuthContext';
 import './styles/LoginStyles.css';
 
 export const Login: React.FC = () => {
@@ -8,6 +9,7 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,6 +19,7 @@ export const Login: React.FC = () => {
       localStorage.setItem('access_token', response.token.AccessToken);
       localStorage.setItem('client_email', email);
       localStorage.setItem('client_role', response.role);
+      login();
       if (response.role === 'Client') {
         navigate('/order');
       }
@@ -46,7 +49,7 @@ export const Login: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Ingresar</button>
+        <button type="submit">Iniciar Sesión</button>
       </form>
       {message && <p>{message}</p>}
     </div>

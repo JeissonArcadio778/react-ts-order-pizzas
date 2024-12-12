@@ -42,3 +42,28 @@ export const loginUser = async (loginData: { email: string; password: string }) 
     throw error;
   }
 };
+
+export const getUserProfile = async (email: string) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/user/profile/${email}`);
+    console.log('User profile:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+}
+
+export const updateUserProfile = async (email: string, profileData: { name: string; email: string; address: string; phone: string }) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/user/profile/${email}`, profileData, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log('User profile updated:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
+  }
+}
+
