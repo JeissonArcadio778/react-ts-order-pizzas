@@ -9,8 +9,8 @@ export const NavBar: React.FC = () => {
 
   return (
     <nav className="navbar">
-      {userRole === 'Client' && <Link to="/order" className="nav-link">Hacer Pedido</Link>}
-      {userRole === 'Client' && <Link to="/purchase-history" className="nav-link">Historial de Pedidos</Link>}
+      {userRole === 'Clients' && <Link to="/order" className="nav-link">Hacer Pedido</Link>}
+      {userRole === 'Clients' && <Link to="/purchase-history" className="nav-link">Historial de Pedidos</Link>}
       <Link to="/profile" className="nav-link">Perfil</Link>
       {(userRole === 'Administrators' || userRole === 'Cooks') && <Link to="/admin" className="nav-link">Admin</Link>}
       <button onClick={logout} className="nav-link">Cerrar Sesión</button>

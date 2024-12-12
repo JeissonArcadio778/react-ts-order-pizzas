@@ -10,6 +10,7 @@ export const createOrder = async (orderData: any, accessToken: string) => {
         'Authorization': `Bearer ${accessToken}`
       },
     });
+    console.log('Order status:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error creating order:', error);

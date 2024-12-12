@@ -48,7 +48,7 @@ const AppContent: React.FC = () => {
         <Route
           path="/order"
           element={
-            <ProtectedRoute roles={['Client']}>
+            <ProtectedRoute roles={['Clients']}>
               <Order />
             </ProtectedRoute>
           }

@@ -20,7 +20,7 @@ export const Login: React.FC = () => {
       localStorage.setItem('client_email', email);
       localStorage.setItem('client_role', response.role);
       login();
-      if (response.role === 'Client') {
+      if (response.role === 'Clients') {
         navigate('/order');
       }
       if (response.role === 'Administrators' || response.role === 'Cooks') {
